@@ -500,6 +500,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
   get _entity_forecast_icon_1(): string {
     return this._config?.entity_forecast_icon_1 || '';
   }
+  
+get _weather_entity(): string {
+    return this._config?.weather_entity || '';
+  }
 
   get _entity_summary_1(): string {
     return this._config?.entity_summary_1 || '';
@@ -944,6 +948,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
   }
 
   private _sectionOverviewEditor(): TemplateResult {
+    //tjl added weather as an included domain for Apparent Temp
     return html`
       <ha-textfield label="Card Title Text Line 1" .value=${this._text_card_title} .configValue=${'text_card_title'}
         @input=${this._valueChanged}>
@@ -979,7 +984,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           name="entity_temperature" label="Entity Current Temperature" allow-custom-entity
           @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
-        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_apparent_temp'} .value=${this._entity_apparent_temp} .includeDomains=${['sensor']}
+        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_apparent_temp'} .value=${this._entity_apparent_temp} .includeDomains=${['sensor', 'weather']}
           name="entity_apparent_temp" label="Entity Apparent Temperature" allow-custom-entity
           @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>` : html``}
@@ -1236,6 +1241,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     return html`
+      <ha-entity-picker .hass=${this.hass} .configValue=${'weather_entity'} .value=${this._weather_entity} .includeDomains=${['weather']}
+        name="weather_entity" label="Main Weather Entity with Forecasts" allow-custom-entity
+        @value-changed=${this._valueChangedPicker}>
+      </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_icon_1'} .value=${this._entity_forecast_icon_1} .includeDomains=${['sensor', 'weather']}
         name="entity_forecast_icon_1" label="Entity Forecast Icon 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
