@@ -1,47 +1,37 @@
-# Platinum Weather Card by [@makin-things](https://www.github.com/makin-things)
+# Platinum Weather Card 
 
-A highly configurable weather card with a graphical configuration.
+A highly configurable weather card with a graphical configuration.  Based on original Platinum Weather Card by [@makin-things](https://www.github.com/makin-things)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 [![GitHub Release][releases-shield]][releases]
 [![License][license-shield]](LICENSE.md)
-![Maintenance](https://img.shields.io/maintenance/yes/2022?style=for-the-badge)
-
-# Support
-
-Hey dude! Help me out for a couple of :beers: or a :coffee:!
-
-[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/theOzzieRat)
-
-If you like this card and would like to see me continue development of it a small donation would be greatly appreciated. I have already spent hundreds of hours working on this.
+![Maintenance](https://img.shields.io/badge/MAINTAINED-NO-red?style=for-the-badge)
 
 # Need Help?
-
-If you need help the best place to ask is in the Home Assistant Community. There is a thread that can be found [here](https://community.home-assistant.io/t/platinum-weather-card-support/449166).
-
-Alternativley create an issue on github, but note that only a couple of people will see that and may be busy doing other things.
+This is not a supported repo.  This was forked from the original Platinum Weather Card with several modifications. The documentation here has also been modified in an attempt to describe the differences or to clarify the original. If you need help with the original Platinum Weather card, the best place to ask is in the Home Assistant Community. There is a thread that can be found [here](https://community.home-assistant.io/t/platinum-weather-card-support/449166).
 
 # Overview
 
-This is a fully customisable weather card with a graphical configuration. It has been patterned after the original Dark-Sky animated weather card (https://github.com/iammexx/home-assistant-config/tree/master/ui/darksky), and a forked variant, the BOM Weather Card (https://github.com/DavidFW1960/bom-weather-card). The aim is that this card is usable by people everywhere and be able to deal with your sensors no matter what integration(s) provides them. To get the most from the card you may need to look at what various weather integrations provide in addition to the standard weather entity.
+This is a fully customisable weather card with a graphical configuration. The aim is that this card is usable by people everywhere and be able to deal with your sensors no matter what integration(s) provides them. To get the most from the card you may need to look at what various weather integrations provide in addition to the standard weather entity.
 
 ![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/platinum-weather-card.png)
 
 The design goals for the card are:
 
 - Totally configurable with a gui editor (no more yaml)
-- Provide an upgrade path from @DavidFW1960 custom-weather-card (we are working very closely to ensure this works)
 - A ridiculous amount of flexibilty, as we can not possibbly guess everyone's use case
-
-There has been a lot of code reused, but this card has effectively been rewritten from the ground up to make it more flexible.
 
 # Installation
 
-This plugin is now part of the default HACS store. Install card from HACS (note that it requires HACS 1.26.0 or greater) the same way you do for other plugins. After installing the card you can add as many instances of the card the the dashboard as you desire. Due to the complexities of the card (icons/split code for performance) it is not recommended you do a manual install (also you don't get automatic updates offered, please use HACS!).
+Different from the original Platinum Weather Card (which is included by default within the HACS store), this plugin can still use HACS, but one needs to configure HACS for this particular repository. To install card from HACS (note that it requires HACS 1.26.0 or greater), configure. After installing the card you can add as many instances of the card on the dashboard as you desire. Due to the complexities of the card (icons/split code for performance) it is not recommended you do a manual install (also you don't get automatic updates offered, please use HACS!).
+- Go to the HACS Settings, and under ADD CUSTOM RESPOSITORY, paste ```https://github.com/tommyjlong/platinum-weather-card ```, and chose ```Plugin``` for the Category.  Hit save, and a new entry titled **[plugin]
+tommyjlong/platinum-weather-card** should be created under CUSTOM REPOSITORY.  
+- Click on the new entry and a page should appear which will allow you to install this card.  
+- Make a note of the instructions at the very bottom of the HACS installation page for adding the url and type to the lovelace configuration.
 
 # Getting Started
 
-You MUST have already configured at least one weather integration to provde data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). It is possible to use entities from multiple integrations (it may require the use of template sensors to extract what you need).
+You MUST have already configured a weather integration to provde data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). The card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations but to do so will require the use of template sensors to extract what you need.  
 When you first create a card it will show nothing until you go and select the entities you want to use in the GUI config, so a card that looks like this is not an error, but just needs configuring.
 
 ![Unconfigured card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/unconfigured-card.png)
@@ -365,6 +355,9 @@ This reference is here for completeness. All settings can be configured using th
 | daily_extended_forecast_days   | Number  | `7`          | Show extended forecast. (only for vertical forecast `(1-7)`)               |
 | option_daily_color_fire_danger | Boolean | `true`       | Use color attributes from fire danger if set (oly for vertical forecast)   |
 
+# History
+The original Platinum Weather Card has been patterned after the original Dark-Sky animated weather card (https://github.com/iammexx/home-assistant-config/tree/master/ui/darksky), and a forked variant, the BOM Weather Card (https://github.com/DavidFW1960/bom-weather-card). One of its original design goals was to rovide an upgrade path from @DavidFW1960 custom-weather-card (we are working very closely to ensure this works). There has been a lot of code reused, but this card has effectively been rewritten from the ground up to make it more flexible.
+
 [license-shield]: https://img.shields.io/github/license/makin-things/platinum-weather-card.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/makin-things/platinum-weather-card.svg?style=for-the-badge
-[releases]: https://github.com/makin-things/platinum-weather-card/releases
+[releases-shield]: https://img.shields.io/github/release/tommyjlong/platinum-weather-card.svg?style=for-the-badge
+[releases]: https://github.com/tommyjlong/platinum-weather-card/releases
