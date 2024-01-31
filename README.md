@@ -8,7 +8,7 @@ A highly configurable weather card with a graphical configuration.  Based on ori
 ![Maintenance](https://img.shields.io/badge/MAINTAINED-NO-red?style=for-the-badge)
 
 # Need Help?
-This is not a supported repo.  This was forked from the original Platinum Weather Card with several modifications. The documentation here has also been modified in an attempt to describe the differences or to clarify the original. If you need help with the original Platinum Weather card, the best place to ask is in the Home Assistant Community. There is a thread that can be found [here](https://community.home-assistant.io/t/platinum-weather-card-support/449166).
+This is not a supported repo.  This was forked from the original [Platinum Weather Card](https://github.com/Makin-Things/platinum-weather-card/tree/master) with several modifications. The documentation here has also been modified in an attempt to describe the differences or to clarify the original. If you need help with the original Platinum Weather card, the best place to ask is in the Home Assistant Community. There is a thread that can be found [here](https://community.home-assistant.io/t/platinum-weather-card-support/449166).
 
 # Overview
 
@@ -18,7 +18,7 @@ This is a fully customisable weather card with a graphical configuration. The ai
 
 The design goals for the card are:
 
-- Totally configurable with a gui editor (no more yaml)
+- Totally configurable with a gui editor (no more YAML, although YAML is still supported)
 - A ridiculous amount of flexibilty, as we can not possibbly guess everyone's use case
 
 # Installation
@@ -31,7 +31,8 @@ tommyjlong/platinum-weather-card** should be created under CUSTOM REPOSITORY.
 
 # Getting Started
 
-You MUST have already configured a weather integration to provde data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). The card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations but to do so will require the use of template sensors to extract what you need.  
+You MUST have already configured a weather integration to provide data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). The card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations but to do so will require the use of template sensors to extract what you need.  
+
 When you first create a card it will show nothing until you go and select the entities you want to use in the GUI config, so a card that looks like this is not an error, but just needs configuring.
 
 ![Unconfigured card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/unconfigured-card.png)
@@ -51,7 +52,7 @@ Rather than putting everything in one gigantic card it is possible to create a f
 
 # Sections
 
-As mentioned above this new card allows you to enable/disable/reorder the sections. These are the sections currently available (we are thinking about adding more).
+As mentioned above this new card allows you to enable/disable/reorder the sections. These are the sections currently available.
 
 On the cards main configuration dialog, use the switch to completely remove a section if it is not required. This will result in that section taking up absolutely no space on the card. Use the up/down buttons to reorder the sections as desired. The Global Options contains settings that have an effect on multiple sections.
 
@@ -83,16 +84,16 @@ The fields available to fill in will be altered based on the layout chosen.
 
 | Option name                           | Type    | Description                                                                                                                                                     |
 | ------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Card Title Line 1                     | String  | Optional text that should be displayed as the cards title                                                                                                       |
-| Card Title Line 2                     | String  | Optional text that should be displayed as the cards title                                                                                                       |
+| Card Title Text Line 1                | String  | Optional text that should be displayed as the cards title                                                                                                       |
+| Card Title Text Line 2                | String  | Optional text that should be displayed as the cards title                                                                                                       |
 | Entity Update Time                    | Entity  | Optionally defines the entity to use for the timestamp. The entities state MUST provide a valid timestamp in RFC 3339 format (ie. `yyyy-mm-ddThh:mm:ss+offset`) |
 | &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the timestamp                                                    |
 | &nbsp;&nbsp;&nbsp;&nbsp;Attribute     | String  | The attribute that contains the timestamp                                                                                                                       |
-| Update Time Preix                     | String  | Optional text to include as a prefix to the timestamp                                                                                                           |
+| Update Time Prefix                    | String  | Optional text to include as a prefix to the timestamp                                                                                                           |
 | Entity Current Temperature            | Entity  | The entity that contains the current temperature                                                                                                                |
 | Entity Apparent Temperature           | Entity  | An optional entity that contains the apparent 'feels like' temperature                                                                                          |
-| Entity Current Conditions             | Entity  | The entity that contains the name of the icon display                                                                                                           |
-| Entity Current Text                   | Entity  | The entity that contains the short headline weather forecast. This should be limited to an entity that will contain only a few words                            |
+| Entity Forecast Icon                  | Entity  | The entity whose state contains the current conditions.  It is used to derive the name of the icon to display. _This use to be Entity Current Conditions_                |
+| Entity Forecast Summary               | Entity  | The entity whose state contains the current condition. It is converted to a prettier state name. (Ex. partlycloudy to Partly cloudy).  _This use to be Entity Current Text_ |
 
 The various entity fields can either be a sensor that provides the value in its state, or in the case where the integration being used simply provides a sensor in the weather.\* domain you can just select that entity and the correct attribute will be used.
 
@@ -198,13 +199,6 @@ The following fields are available.
 | Time format      | String  | Selects whether to use the system time format or explicitly set 12 or 24 hour mode |
 | Locale           | String  | Specifies a locale to pass into any conversion functions                           |
 
-# Migration from the old card
-
-Migration from the older [Custom Animated Weather Card](https://github.com/DavidFW1960/bom-weather-card) is straight forward. It is recommended that you create a new card rather so that your current cards config is preserved until you are happy with the new cards configuration.
-
-Create a new Platinum Weather Card, switch to the Code Editor (YAML mode) and simply paste in the contents of your existing configuration, making sure to keep the new `type: custom:platinum-weather-card`. At this stage some elements may not appear correctly. Save the card and then edit it again (the editor updates the configuration when opened if it detects an older config and performs some update tasks) and then save it once more.
-
-If there are still items that don't look correct you will need to manually adjust those to suit.
 
 # YAML Reference
 
@@ -357,6 +351,13 @@ This reference is here for completeness. All settings can be configured using th
 
 # History
 The original Platinum Weather Card has been patterned after the original Dark-Sky animated weather card (https://github.com/iammexx/home-assistant-config/tree/master/ui/darksky), and a forked variant, the BOM Weather Card (https://github.com/DavidFW1960/bom-weather-card). One of its original design goals was to rovide an upgrade path from @DavidFW1960 custom-weather-card (we are working very closely to ensure this works). There has been a lot of code reused, but this card has effectively been rewritten from the ground up to make it more flexible.
+## Migration from the old card
+
+Migration from the older [Custom Animated Weather Card](https://github.com/DavidFW1960/bom-weather-card) is straight forward. It is recommended that you create a new card rather so that your current cards config is preserved until you are happy with the new cards configuration.
+
+Create a new Platinum Weather Card, switch to the Code Editor (YAML mode) and simply paste in the contents of your existing configuration, making sure to keep the new `type: custom:platinum-weather-card`. At this stage some elements may not appear correctly. Save the card and then edit it again (the editor updates the configuration when opened if it detects an older config and performs some update tasks) and then save it once more.
+
+If there are still items that don't look correct you will need to manually adjust those to suit.
 
 [license-shield]: https://img.shields.io/github/license/makin-things/platinum-weather-card.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/tommyjlong/platinum-weather-card.svg?style=for-the-badge
