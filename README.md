@@ -31,7 +31,7 @@ tommyjlong/platinum-weather-card** should be created under CUSTOM REPOSITORY.
 
 # Getting Started
 
-You MUST have already configured a weather integration to provide data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). The card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations but to do so will require the use of template sensors to extract what you need.  
+You MUST have already configured a weather integration to provide data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). In this "forked version", for forecasts data, the card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations for forecasts but to do so will require the use of template sensors to extract what you need.  
 
 When you first create a card it will show nothing until you go and select the entities you want to use in the GUI config, so a card that looks like this is not an error, but just needs configuring.
 
@@ -52,7 +52,11 @@ Rather than putting everything in one gigantic card it is possible to create a f
 
 # Sections
 
-As mentioned above this new card allows you to enable/disable/reorder the sections. These are the sections currently available.
+As mentioned above, this new card allows you to enable/disable/reorder the sections. These are the sections currently available:
+* Overview
+* Extended
+* Slots
+* Daily Forecasts
 
 On the cards main configuration dialog, use the switch to completely remove a section if it is not required. This will result in that section taking up absolutely no space on the card. Use the up/down buttons to reorder the sections as desired. The Global Options contains settings that have an effect on multiple sections.
 
@@ -60,25 +64,25 @@ On the cards main configuration dialog, use the switch to completely remove a se
 
 This section as the name suggests, adds an overview section to the card.
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/overview-section-highlighted.png)
+![Platinum Weather card](./images/overview-section-highlighted-update.png)
 
 There are 4 different layout options to choose from for the overview section. There are 'complete', 'observations', 'forecast' and 'title only'.
 
 <caption>Complete</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/overview-section-complete.png 'Complete')
+![Platinum Weather card](./images/overview-section-complete.png 'Complete')
 
 <caption>Observations</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/overview-section-observations.png 'Observations')
+![Platinum Weather card](./images/overview-section-observations.png 'Observations')
 
 <caption>Forecast</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/overview-section-forecast.png 'Forecast')
+![Platinum Weather card](./images/overview-section-forecast.png 'Forecast')
 
 <caption>Title Only</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/overview-section-title-only.png 'Title Only')
+![Platinum Weather card](./images/overview-section-title-only.png 'Title Only')
 
 The fields available to fill in will be altered based on the layout chosen.
 
@@ -95,20 +99,23 @@ The fields available to fill in will be altered based on the layout chosen.
 | Entity Forecast Icon                  | Entity  | The entity whose state contains the current conditions.  It is used to derive the name of the icon to display. _This use to be Entity Current Conditions_                |
 | Entity Forecast Summary               | Entity  | The entity whose state contains the current condition. It is converted to a prettier state name. (Ex. partlycloudy to Partly cloudy).  _This use to be Entity Current Text_ |
 
-The various entity fields can either be a sensor that provides the value in its state, or in the case where the integration being used simply provides a sensor in the weather.\* domain you can just select that entity and the correct attribute will be used.
+The various entity fields can either be a sensor that provides the value in its state, or in the case where the weather integration is being used, you can just select that weather entity and a corresponding attribute will be selected automatically.
 
 ## Extended Section
 
-A section that shows todays detailed forecast. To use this section you will need a weather integration that provides a more detailed weather forecast (this does not exist within the standard weather.\* sensor). If it is not available for your location the best thing to do is to disable the extended section.
+A section that shows today's detailed forecast (See the figure below with the highlighted red box). To use this section you will need either a weather integration or a sensor that provides a more detailed text about today's weather forecast (Note: not all weather integrations or weather systems support this). 
+* If it is available with your weather entity, then in this "forked version" of the card, configure the "Entity Extended Forecast" along with the "Extended Use Attribute" set to ON (`true` in YAML) and set the "Extended Name Attribute" to the name of the weather entity's attribute.
+* For a sensor, configure the "Entity Extended Forecast" and the state will be used as text, or optionally in addition, set the "Extended Use Attribute" to ON (`true` in YAML) and set the "Extended Name Attribute" to the name of the sensor entity's attribute.
+* If it is not available for your weather integration the best thing to do is to disable the extended section.
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/extended-section-highlighted.png)
+![Platinum Weather card](./images/extended-section-highlighted.png)
 
 The following fields are available.
 
 | Option name                           | Type    | Description                                                                                                          |
 | ------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
 | Entity Extended Forecast              | Entity  | The name of the entity that contains the detailed forecast                                                           |
-| &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast |
+| &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast.  In this "forked version", if a weather entity is used for the Entity Extended Forecast, then this must be set to ON/true and the Attribute must also be configured. |
 | &nbsp;&nbsp;&nbsp;&nbsp;Attribute     | String  | The attribute that contains the detailed forecast                                                                    |
 | Entity Today's UV Forecast            | String  | If defined the text from this entity will be appended to the detailed forecast                                       |
 | Entity Today's Fire Danger            | String  | If defined the text from this entity will be appended to the detailed forecast                                       |
@@ -117,7 +124,7 @@ The following fields are available.
 
 A section to show a set of data in 2 columns (with up to 8 rows). This section is highly configurable. As you select different options for the slots the set of entities that are needed gets dynamically updated to indicate what options should be set.
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/slots-section-highlighted.png)
+![Platinum Weather card](./images/slots-section-highlighted.png)
 
 The following table describes what each slot value is intended to show. Note that what is available is very dependant on the weather integration in use.
 
@@ -156,17 +163,17 @@ The following table describes what each slot value is intended to show. Note tha
 
 A section to show the daily forecast for a specified number of days in either a horizontal or vertical layout.
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/daily-forecast-section-highlighted.png)
+![Platinum Weather card](./images/daily-forecast-section-highlighted.png)
 
 There are two posible layouts.
 
 <caption>Horizontal</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/daily-forecast-section-horizontal.png 'Horizontal')
+![Platinum Weather card](./images/daily-forecast-section-horizontal.png 'Horizontal')
 
 <caption>Vertical</caption>
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/daily-forecast-section-vertical.png 'Vertical')
+![Platinum Weather card](./images/daily-forecast-section-vertical.png 'Vertical')
 
 The following fields are available.
 
@@ -189,7 +196,7 @@ For these entities you can either specify a weather.\* sensor (except for extend
 
 This page contains options that don't neatly fit in other places (ie. they have an effect on multiple sections).
 
-![Platinum Weather card](https://raw.githubusercontent.com/Makin-Things/platinum-weather-card/master/images/global-options.png)
+![Platinum Weather card](./images/global-options.png)
 
 The following fields are available.
 
