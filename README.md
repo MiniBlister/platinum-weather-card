@@ -68,19 +68,19 @@ This section as the name suggests, adds an overview section to the card.
 
 There are 4 different layout options to choose from for the overview section. There are 'complete', 'observations', 'forecast' and 'title only'.
 
-<caption>Complete</caption>
+<caption><b>Complete</b></caption>
 
 ![Platinum Weather card](./images/overview-section-complete.png 'Complete')
 
-<caption>Observations</caption>
+<caption><b>Observations</b></caption>
 
 ![Platinum Weather card](./images/overview-section-observations.png 'Observations')
 
-<caption>Forecast</caption>
+<caption><b>Forecast</b></caption>
 
 ![Platinum Weather card](./images/overview-section-forecast.png 'Forecast')
 
-<caption>Title Only</caption>
+<caption><b>Title Only</b></caption>
 
 ![Platinum Weather card](./images/overview-section-title-only.png 'Title Only')
 
@@ -167,30 +167,41 @@ A section to show the daily forecast for a specified number of days in either a 
 
 There are two posible layouts.
 
-<caption>Horizontal</caption>
+**Horizontal** </br>
+This is configured in YAML mode by setting `daily_forecast_layout: horizontal` (default).
 
-![Platinum Weather card](./images/daily-forecast-section-horizontal.png 'Horizontal')
+![Platinum Weather card](./images/daily-forecast-section-horizontal.png 'Horizontal')</br>
+  There are two configuration options available for showing the Maximum and Minimum Temperatures:
+  * `old_daily_format` (YAML mode)
+      * `true` will show "Maximum Temperature" on one line and underneath it the "Minimum Temperature on a second line, one over the top of the other.
+      * `false` (default) will show "Minimum temperature" and "Maximum Temperature" on one line separated by "/".
+  * `tempformat` (YAML mode)
+      * `highlow` - When old_daily_format is set to false, will show the Maximum Temperature first, and then Minimum Temperature.  This will be useful for forecasts have that day's mimimum lows actually occurring after midnight the following day.
+      * _otherwise_ (default) When old_daily_format is set to false, will show the Minimum Temperature first and then Maximum Temperature.  This will be useful for forecasts that have that day's minimum low occuring on the same day.</br>
 
-<caption>Vertical</caption>
+**Vertical**</br>
+This is configured in YAML mode by setting `daily_forecast_layout: vertical`.
 
 ![Platinum Weather card](./images/daily-forecast-section-vertical.png 'Vertical')
 
 The following fields are available.
 
-| Option name                           | Type    | Description                                                                                                          |
-| ------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| Entity Forecast Icon 1                | String  | The entity that provides the description of which icon to use                                                        |
-| Entity Forecast Summary 1             | String  | The entity that provides the short summary text                                                                      |
-| Entity Forecast Min 1                 | String  | The entity that provides the forecast minimum temperature                                                            |
-| Entity Forecast Max 1                 | String  | The entity that provides the forecast maximum temperature                                                            |
-| Entity Forecast Chance of Rain 1      | String  | The entity that provides the percentage chance of rain                                                               |
-| Entity Forecast Possible Rain 1       | String  | The entity that provide the estimated amount of rain                                                                 |
-| Entity Extended Forecast 1            | String  | The name of the entity that contains the detailed forecast                                                           |
-| &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast |
-| &nbsp;&nbsp;&nbsp;&nbsp;Attribute     | String  | The attribute that contains the detailed forecast                                                                    |
-| Entity Fire Danger 1                  | String  | The entity that provides the fire danger forecast                                                                    |
+| Option name                               | Type    | Description                                                                                                          |
+| ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| Main Weather Entity with Forecasts        | String  | In this "forked version", if a weather entity is used to provide forecast data, a single weather entity must be configured here. Any other configuration(s) below using a weather entity must set the configured entity to be the same as this one.    |
+| Entity Forecast Icon 1                    | String  | The sensor entity whose state, or the weather entity whose forecast attribute `condition` contains the forecasted condition. It is used to derive the name of the icon to display.                                                        |
+| Entity Forecast Summary 1                 | String  | The sensor entity whose state provides the short summary text (ex. "Showers increasing."). In this "forked version", a weather entity can be also be used and its forecast attribute `condition` will be used for the summary text and it is converted to a prettier state name. (Ex. partlycloudy to Partly cloudy).                                                                      |
+| Entity Forecast Min 1                     | String  | The entity that provides the forecast minimum temperature                                                            |
+| Entity Forecast Max 1                     | String  | The entity that provides the forecast maximum temperature                                                            |
+| Entity Forecast Chance of Rain 1          | String  | The entity that provides the percentage chance of rain                                                               |
+| Entity Forecast Possible Rain 1           | String  | The entity that provides the estimated amount of rain                                                                |
+| Entity Extended Forecast 1                | String  | The name of the entity that contains the detailed forecast text.  In this "forked version" if a weather entity is used it has to be specified directly.                                                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute     | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast.  In this "forked version", if a weather entity is used for the Entity Extended Forecast 1, then this must be set to ON/true and the Attribute must also be configured. |
+| &nbsp;&nbsp;&nbsp;&nbsp;Attribute         | String  | The attribute that contains the detailed forecast text.  In this "forked version" for a weather entity, if its name is not listed, you can specify it directly |
+| Entity Fire Danger 1                      | String  | The entity that provides the fire danger forecast                                                                    |
 
-For these entities you can either specify a weather.\* sensor (except for extended forecasts and fire danger as they aren't included in weather integrations) in which case it will use the data from the attributes, or you can use individual sensors and provide the name of the sensor for tomorrow (these sensors must have an incrementing number in their name).
+For these entities you can either specify a weather entity, in which case this card will use the data from the forecast's attributes (note that "detailed forecast text" and "fire danger" may not be included in your weather integration's forecast), or you can use individual template sensors and when you provide the name of the sensor for tomorrow's forecast item use a number in the name and then repeat this for the subsequent days' sensors and make sure these corresponding subsequent days' sensors have an incrementing number in their name.
+
 
 ## Global options
 
@@ -209,7 +220,7 @@ The following fields are available.
 
 # YAML Reference
 
-This reference is here for completeness. All settings can be configured using the GUI so you should not need to refer to this. The options are split into global settings and a section for each of the sections in the card.
+This reference is here for completeness and can be configured in the card's editor while in "SHOW CODE EDITOR" mode. Almost all settings can be configured using the GUI so in general, you should not need to refer to this. The options are split into global settings and a section for each of the sections in the card.
 
 ## Global Settings
 
@@ -223,10 +234,42 @@ This reference is here for completeness. All settings can be configured using th
 | show_section_daily_forecast | Boolean | `true`                                                          | Specifies if the daily_forecast section is visible                  |
 | tap_action                  | Action  | none                                                            | Specifies what action to perform when the card is tapped            |
 | hold_action                 | Action  | none                                                            | Specifies what action to perform when the card is held              |
+| double_tap_action           | Action  | none                                                            | Specifies what action to perform when the card is double tapped     |
 | option_static_icons         | Boolean | false                                                           | Set to true to use non-animated icons                               |
 | option_time_format          | String  | `system`                                                        | Can be one of `system`, `12hour` or `24hour`                        |
 | option_locale               | String  | none                                                            | The locale to use when formatting timestamps                        |
 | text_update_time_prefix     | String  | none                                                            | Specifies a string to prepend to the update time                    |
+
+## Actions
+This "forked version" tweaked the original somewhat.  All the [Actions](https://www.home-assistant.io/dashboards/actions/) that are documented in Home Assistant may or may not be supported.
+Here are some examples showing how "Actions" can be used.</br>
+
+**Tap Action**</br>
+In this example the action `more-info` is used to pop up a targetted entity's "more info" card.  The targetted entity has to be specified further as either `entity` or `camera_image` (You can use both but `entity` will take precedence).
+```
+tap_action:
+  action: more-info
+
+camera_image: camera.back_yard_camera
+entity: weather.my_abc_weather
+```
+**Hold Action**</br>
+In this example, a hold action will navigate the user to lovelace view (a UI tab) named "MISC".
+```
+hold_action:
+  action: navigate
+  navigation_path: /lovelace/misc
+```
+**Double Tap Action**</br>
+In this example, a double-tap action will toggle on/off a specified light.
+```
+double_tap_action:
+  action: call-service
+  service: light.toggle
+  data: {}
+  target:
+    entity_id: light.test_product
+```
 
 ## Overview Settings
 
@@ -350,13 +393,19 @@ This reference is here for completeness. All settings can be configured using th
 
 | Variable                       | Type    | Default      | Description                                                                |
 | ------------------------------ | ------- | ------------ | -------------------------------------------------------------------------- |
+| weather_entity                 | String  |              | The main weather entity for all weather entity related forecasts           |
+| forecast_type                  | String  | `daily`      | When using the main weather entity, this specifies the forecast type.  Only "Daily" is supported |
 | daily_forecast_layout          | String  | `horizontal` | Format for layout `horizontal` or `vertical`                               |
 | daily_forecast_days            | Number  | `5`          | Number of days to include in forecast. `horizontal (1-5)` `vertical (1-7)` |
 | option_tooltips                | Boolean | `false`      | Show forecast tooltips on horizontal forecast                              |
 | daily_extended_forecast_days   | Number  | `7`          | Show extended forecast. (only for vertical forecast `(1-7)`)               |
 | option_daily_color_fire_danger | Boolean | `true`       | Use color attributes from fire danger if set (oly for vertical forecast)   |
+| old_daily_format               | Boolean | `false`      | If set to true, will show High Temps over the top of Low Temps             |
+| tempformat                     | String  |              | If set to `highlow` then High temps are shown first followed by Low temps  |
 
 # History
+This "forked version" of the Platinum Weather Card's main modification is to support Home Assistant's new [2023.9](https://www.home-assistant.io/blog/2023/09/06/release-20239/#weather-forecast-service) method for obtaining Weather Forecasts as this is not supported in the original. This new method requires the front-end to subscribe to weather forecast events with the weather integration. The data received is the same data that can be found using the new service `weather.get_forecasts`.
+
 The original Platinum Weather Card has been patterned after the original Dark-Sky animated weather card (https://github.com/iammexx/home-assistant-config/tree/master/ui/darksky), and a forked variant, the BOM Weather Card (https://github.com/DavidFW1960/bom-weather-card). One of its original design goals was to rovide an upgrade path from @DavidFW1960 custom-weather-card (we are working very closely to ensure this works). There has been a lot of code reused, but this card has effectively been rewritten from the ground up to make it more flexible.
 ## Migration from the old card
 
