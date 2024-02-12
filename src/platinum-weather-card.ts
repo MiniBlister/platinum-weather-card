@@ -187,8 +187,8 @@ export class PlatinumWeatherCard extends LitElement {
     //tjl - but could build this.  
     //  https://github/homeassistant/frontend/src/panels/lovelace/cards/hui-weather-forecast-card.ts
     //  Change "entity" (?:string) to new weather_entity type (string only)
-    //  Note: forecast_type defaults to daily, so not required to be configured by the user.
-    //  Note: hourly nor twice_daily are supported by this card.
+    //  Note: forecast_type required to be set.
+    //  Note: forecast_type daily supported by this card but not hourly nor twice_daily 
     this._subscribed = subscribeForecast(
       this.hass!,
     //this._config!.entity,
@@ -417,8 +417,12 @@ export class PlatinumWeatherCard extends LitElement {
     }
       //tjl add warning if new method for getting forecast is used and forecast_type not 'daily'
       if (this._config.weather_entity !== undefined ) {
-        if ( this._config.forecast_type !== undefined  && this._config.forecast_type !== 'daily') {
+        if ( this._config.forecast_type !== undefined ) {
+          if ( this._config.forecast_type !== 'daily') {
             this._error.push(`'forecast_type can only be set to daily`);
+          }
+        } else {  
+            this._error.push(`'forecast_type needs to be configured.`);
         }
       }
     return this._error.length !== 0;

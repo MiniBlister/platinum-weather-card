@@ -505,6 +505,11 @@ get _weather_entity(): string {
     return this._config?.weather_entity || '';
   }
 
+get _forecast_type(): string {
+    return this._config?.forecast_type || '';
+  }
+
+
   get _entity_summary_1(): string {
     return this._config?.entity_summary_1 || '';
   }
@@ -1040,7 +1045,7 @@ get _weather_entity(): string {
     }
 
     return html`
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended'} .value=${this._entity_extended} .includeDomains=${['sensor']}
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended'} .value=${this._entity_extended} .includeDomains=${['sensor', 'weather']}
         name="entity_extended" label="Entity Extended Forecast" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
@@ -1245,6 +1250,13 @@ get _weather_entity(): string {
         name="weather_entity" label="Main Weather Entity with Forecasts" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
+      <ha-select label="Forecast Type" .configValue=${'forecast_type'}
+        .value=${this._forecast_type ? this._forecast_type : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
+        <mwc-list-item></mwc-list-item>
+        <mwc-list-item value="daily">Daily</mwc-list-item>
+        <mwc-list-item value="hourly">Hourly</mwc-list-item>
+        <mwc-list-item value="twice_daily">Twice Daily</mwc-list-item>
+      </ha-select>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_icon_1'} .value=${this._entity_forecast_icon_1} .includeDomains=${['sensor', 'weather']}
         name="entity_forecast_icon_1" label="Entity Forecast Icon 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
@@ -1266,7 +1278,7 @@ get _weather_entity(): string {
         name="entity_pos_1" label="Entity Forecast Possible Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       ${this._daily_forecast_layout === 'vertical' ? html`
-        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended_1'} .value=${this._entity_extended_1} .includeDomains=${['sensor']}
+        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended_1'} .value=${this._entity_extended_1} .includeDomains=${['sensor', 'weather']}
           name="entity_extended_1" label="Entity Extended Forecast 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
         ${this._entity_extended_1 !== '' ? html`
