@@ -165,22 +165,21 @@ A section to show the daily forecast for a specified number of days in either a 
 
 ![Platinum Weather card](./images/daily-forecast-section-highlighted.png)
 
-There are two posible layouts.
+There are two posible layouts.  These are configured in the Card Editor for the Daily Section "Options".
 
 **Horizontal** </br>
-This is configured in YAML mode by setting `daily_forecast_layout: horizontal` (default).
+This is the default.
 
 ![Platinum Weather card](./images/daily-forecast-section-horizontal.png 'Horizontal')</br>
   There are two configuration options available for showing the Maximum and Minimum Temperatures:
-  * `old_daily_format` (YAML mode)
+  * `old_daily_format` (YAML mode only)
       * `true` will show "Maximum Temperature" on one line and underneath it the "Minimum Temperature on a second line, one over the top of the other.
       * `false` (default) will show "Minimum temperature" and "Maximum Temperature" on one line separated by "/".
-  * `tempformat` (YAML mode)
+  * `tempformat` (YAML mode only)
       * `highlow` - When old_daily_format is set to false, will show the Maximum Temperature first, and then Minimum Temperature.  This will be useful for forecasts have that day's mimimum lows actually occurring after midnight the following day.
       * _otherwise_ (default) When old_daily_format is set to false, will show the Minimum Temperature first and then Maximum Temperature.  This will be useful for forecasts that have that day's minimum low occuring on the same day.</br>
 
 **Vertical**</br>
-This is configured in YAML mode by setting `daily_forecast_layout: vertical`.
 
 ![Platinum Weather card](./images/daily-forecast-section-vertical.png 'Vertical')
 
@@ -188,8 +187,9 @@ The following fields are available.
 
 | Option name                               | Type    | Description                                                                                                          |
 | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| Main Weather Entity with Forecasts        | String  | In this "forked version", if a weather entity is used to provide forecast data, a single weather entity must be configured here. Any other configuration(s) below using a weather entity must set the configured entity to be the same as this one.    |
-| Entity Forecast Icon 1                    | String  | The sensor entity whose state, or the weather entity whose forecast attribute `condition` contains the forecasted condition. It is used to derive the name of the icon to display.                                                        |
+| Main Weather Entity with Forecasts        | String  | In this "forked version", if a weather entity is used to provide forecast data, a single weather entity must be configured here. Any other configuration(s) below using a weather entity must set the configured weather entity to be the same as this one.    |
+| Forecast Type                             | String  | In this "forked version", if a weather entity is used to provide forecast data, the forecast type must be configured and set to "daily".  _In the future, options for "Hourly" and "Twice Daily" may be supported._   |
+| Entity Forecast Icon 1                    | String  | The sensor entity whose state, or the weather entity whose forecast attribute `condition` contains the forecasted condition. It is used to derive the name of the icon to display.        |
 | Entity Forecast Summary 1                 | String  | The sensor entity whose state provides the short summary text (ex. "Showers increasing."). In this "forked version", a weather entity can be also be used and its forecast attribute `condition` will be used for the summary text and it is converted to a prettier state name. (Ex. partlycloudy to Partly cloudy).                                                                      |
 | Entity Forecast Min 1                     | String  | The entity that provides the forecast minimum temperature                                                            |
 | Entity Forecast Max 1                     | String  | The entity that provides the forecast maximum temperature                                                            |
@@ -324,6 +324,7 @@ double_tap_action:
 | entity_rainfall                   | String  | none            | Entity required for `rainfall`                                   |
 | entity_humidity                   | String  | none            | Entity required for `humidity`                                   |
 | entity_pressure                   | String  | none            | Entity required for `pressure`                                   |
+| pressure_units                    | String  | none            | Optional string for current pressure units                       |
 | entity_observed_max               | String  | none            | Entity required for `observed_max` and `temp_maximums`           |
 | entity_observed_min               | String  | none            | Entity required for `observed_min` and `temp_minimums`           |
 | entity_forecast_max               | String  | none            | Entity required for `forecast_max` and `temp_maximums`           |
@@ -394,7 +395,7 @@ double_tap_action:
 | Variable                       | Type    | Default      | Description                                                                |
 | ------------------------------ | ------- | ------------ | -------------------------------------------------------------------------- |
 | weather_entity                 | String  |              | The main weather entity for all weather entity related forecasts           |
-| forecast_type                  | String  | `daily`      | When using the main weather entity, this specifies the forecast type.  Only "Daily" is supported |
+| forecast_type                  | String  | `daily`      | When using the main weather entity, this specifies the forecast type.  Only "Daily" is supported. _In the future, options for "Hourly" and "Twice Daily" may be supported._  |
 | daily_forecast_layout          | String  | `horizontal` | Format for layout `horizontal` or `vertical`                               |
 | daily_forecast_days            | Number  | `5`          | Number of days to include in forecast. `horizontal (1-5)` `vertical (1-7)` |
 | option_tooltips                | Boolean | `false`      | Show forecast tooltips on horizontal forecast                              |
