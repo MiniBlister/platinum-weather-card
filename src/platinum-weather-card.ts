@@ -2604,11 +2604,25 @@ export class PlatinumWeatherCard extends LitElement {
 
     switch (measure) {
       case 'air_pressure':
-        return this._config.entity_pressure !== undefined && this.hass.states[this._config.entity_pressure].attributes.unit_of_measurement !== undefined ?
-          this.hass.states[this._config.entity_pressure].attributes.unit_of_measurement as string :
-          lengthUnit === 'km' ?
-            'hPa' :
-            'mbar';
+        // tjl Feature Add. Add weather entity and get air pressure units from weather entity attributes.
+        const entity = this._config.entity_pressure;
+        return entity && this.hass.states[entity]
+          ? entity.match('^weather.') === null
+            ? this.hass.states[entity].attributes.unit_of_measurement !== undefined 
+              ? this.hass.states[entity].attributes.unit_of_measurement as string 
+              : lengthUnit === 'km' 
+                ? 'hPa' 
+                : 'mbar'
+            : this.hass.states[entity].attributes.pressure_unit !== undefined 
+              ? this.hass.states[entity].attributes.pressure_unit 
+              : '--'
+          : '--';
+
+//      return this._config.entity_pressure !== undefined && this.hass.states[this._config.entity_pressure].attributes.unit_of_measurement !== undefined ?
+//        this.hass.states[this._config.entity_pressure].attributes.unit_of_measurement as string :
+//        lengthUnit === 'km' ?
+//          'hPa' :
+//          'mbar';
       case 'length':
         return lengthUnit;
       case 'precipitation':
