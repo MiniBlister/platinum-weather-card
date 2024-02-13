@@ -757,7 +757,7 @@ get _forecast_type(): string {
 
     const entity_wind_gust = entities.has("entity_wind_gust") ?
       html`
-        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_wind_gust'} .value=${this._entity_wind_gust} .includeDomains=${['sensor']}
+        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_wind_gust'} .value=${this._entity_wind_gust} .includeDomains=${['sensor', 'weather']}
           name="entity_wind_gust" label="Entity Wind Gust" allow-custom-entity @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
       ` : '';

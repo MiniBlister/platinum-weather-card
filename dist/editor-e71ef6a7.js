@@ -1,4 +1,4 @@
-import{o as e,l as t,_ as i,a as o,s as n,b as a,n as d,e as r,i as l,t as s,T as c,x as m,r as h,c as p,d as u,A as f,f as _,g,h as v}from"./platinum-weather-card-1925263a.js";
+import{o as e,l as t,_ as i,a as o,s as n,b as a,n as d,e as r,i as l,t as s,T as c,x as m,r as h,c as p,d as u,A as f,f as _,g,h as v}from"./platinum-weather-card-25d4569e.js";
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -899,7 +899,7 @@ const vi=h`.mdc-floating-label{-moz-osx-font-smoothing:grayscale;-webkit-font-sm
           name="entity_wind_speed" label="Entity Wind Speed" allow-custom-entity @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
       `:"",k=g.has("entity_wind_gust")?m`
-        <ha-entity-picker .hass=${this.hass} .configValue=${"entity_wind_gust"} .value=${this._entity_wind_gust} .includeDomains=${["sensor"]}
+        <ha-entity-picker .hass=${this.hass} .configValue=${"entity_wind_gust"} .value=${this._entity_wind_gust} .includeDomains=${["sensor","weather"]}
           name="entity_wind_gust" label="Entity Wind Gust" allow-custom-entity @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
       `:"",$=g.has("entity_wind_speed_kt")?m`
