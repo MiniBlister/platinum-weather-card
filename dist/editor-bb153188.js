@@ -1,4 +1,4 @@
-import{o as e,l as t,_ as i,a as o,s as n,b as a,n as d,e as r,i as l,t as s,T as c,x as m,r as h,c as p,d as u,A as f,f as _,g,h as v}from"./platinum-weather-card-25d4569e.js";
+import{o as e,l as t,_ as i,a as o,s as n,b as a,n as d,e as r,i as l,t as s,T as c,x as m,r as h,c as p,d as u,A as f,f as _,g,h as v}from"./platinum-weather-card-911fca81.js";
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1274,7 +1274,7 @@ const vi=h`.mdc-floating-label{-moz-osx-font-smoothing:grayscale;-webkit-font-sm
       </div>
     `}_sectionDailyForecastEditor(){return!0===this._daily_extended_use_attr&&(void 0===this.hass||void 0===this.hass.states[this._entity_extended_1]||this.hass.states[this._entity_extended_1].attributes),m`
       <ha-entity-picker .hass=${this.hass} .configValue=${"weather_entity"} .value=${this._weather_entity} .includeDomains=${["weather"]}
-        name="weather_entity" label="Main Weather Entity with Forecasts" allow-custom-entity
+        name="weather_entity" label="Weather Entity with Forecasts" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-select label="Forecast Type" .configValue=${"forecast_type"}

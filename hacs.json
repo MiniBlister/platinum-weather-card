@@ -1,6 +1,6 @@
 {
   "name": "Platinum Weather Card",
-  "hacs": "1.1.0",
+  "hacs": "1.2.0",
   "render_readme": true,
   "hide_default_branch": true
 }

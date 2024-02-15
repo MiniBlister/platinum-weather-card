@@ -135,9 +135,9 @@ export class PlatinumWeatherCard extends LitElement {
       this._config.forecast_type &&
       this._config.forecast_type !== "legacy"
     ) {
-      console.info(`_needForecastSubscription T`);
+    //console.info(`_needForecastSubscription T`);
     } else {
-      console.info(`_needForecastSubscription F`);
+    //console.info(`_needForecastSubscription F`);
     }
     return (
       this._config &&
@@ -150,7 +150,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   //tjl copy from bramkragten's weather-card
   _unsubscribeForecastEvents() {
-    console.info(`_unsubscribeForecastEvents`);
+  //console.info(`_unsubscribeForecastEvents`);
     if (this._subscribed) {
       this._subscribed.then((unsub) => unsub());
       this._subscribed = undefined;
@@ -160,7 +160,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   //tjl copy/modified from bramkragten weather-card
   async _subscribeForecastEvents() {
-    console.info(`_subscribeForecastEvents`);
+  //console.info(`_subscribeForecastEvents`);
     this._unsubscribeForecastEvents();
     if (
       !this.isConnected ||
@@ -171,7 +171,7 @@ export class PlatinumWeatherCard extends LitElement {
       return;
     }
 
-    console.info(`Attempt SubscribeForecastEvents`);
+  //console.info(`Attempt SubscribeForecastEvents`);
 
 //  //tjl - from bramkragten's weather card. Couldn't get this to build
 //  this._subscribed = this.hass.connection.subscribeMessage(
@@ -203,7 +203,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   //tjl from bramkragten's weather-card
   connectedCallback() {
-    console.info(`SubscribeForecast connected`);
+  //console.info(`SubscribeForecast connected`);
     super.connectedCallback();
     if (this.hasUpdated && this._config && this.hass) {
       this._subscribeForecastEvents();
@@ -213,7 +213,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   //tjl from bramkragten's weather-card
   disconnectedCallback() {
-    console.info(`SubscribeForecast disconnected`);
+  //console.info(`SubscribeForecast disconnected`);
     super.disconnectedCallback();
     this._unsubscribeForecastEvents();
   }
@@ -489,7 +489,6 @@ export class PlatinumWeatherCard extends LitElement {
     const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : ``;
 
   //tjl use the new formatEntityState method for formatting an entity's presentation state (sunny to Sunny).
-  //console.info(`formatEntityState: ${this.hassExtended.formatEntityState(this.hass.states['weather.my_abc_weather'])}`);
     const forecastText = (this._config.entity_summary) && (this.hass.states[this._config.entity_summary]) ?
       html`<div class="forecast-text">${this.hassExtended.formatEntityState(this.hass.states[this._config.entity_summary])}</div>` ?? html`<div class="forecast-text">---</div>` : html``;
     //html`<div class="forecast-text">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text">---</div>` : html``;
@@ -767,7 +766,7 @@ export class PlatinumWeatherCard extends LitElement {
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
 
-      console.info(`Forecast-H Date ${forecastDate}`); //tjl
+    //console.info(`Forecast-H Date ${forecastDate}`); //tjl
 
       if (this._config.entity_forecast_icon_1?.match('^weather.')) {
         // using a weather domain entity
@@ -777,7 +776,7 @@ export class PlatinumWeatherCard extends LitElement {
         var condition: string | undefined;
         if (this.forecast1 !== undefined ) {
           condition = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'condition');
-          console.info(`getForecast-H condition: ${condition}`);
+        //console.info(`getForecast-H condition: ${condition}`);
         }
       //const condition = this._getForecastPropFromWeather(this.hass.states[iconEntity].attributes.forecast, forecastDate, 'condition');
         if (condition === undefined) {
@@ -801,7 +800,7 @@ export class PlatinumWeatherCard extends LitElement {
        //tjl using new forecast subscribe method
         if (this.forecast1 !== undefined ) {
           maxTemp = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'temperature');
-          console.info(`getForecast-H temperature: ${maxTemp}`);
+        //console.info(`getForecast-H temperature: ${maxTemp}`);
         }
       //maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_1].attributes.forecast, forecastDate, 'temperature');
       } else {
@@ -813,7 +812,7 @@ export class PlatinumWeatherCard extends LitElement {
        //tjl using new forecast subscribe method
         if (this.forecast1 !== undefined ) {
           minTemp = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'templow');
-          console.info(`getForecast templow: ${minTemp}`);
+        //console.info(`getForecast templow: ${minTemp}`);
         }
       //minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_1].attributes.forecast, forecastDate, 'templow');
       } else {
@@ -870,7 +869,7 @@ export class PlatinumWeatherCard extends LitElement {
         var popData: string | undefined;
         if (this.forecast1 !== undefined ) {
           popData = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'precipitation_probability');
-          console.info(`getForecast-H precip_prob: ${popData}`);
+        //console.info(`getForecast-H precip_prob: ${popData}`);
         }
       //const popData = this._getForecastPropFromWeather(this.hass.states[popEntity].attributes.forecast, forecastDate, 'precipitation_probability');
         pop = popEntity ? html`<li class="f-slot-horiz-text"><span><div class="slot-text pop">${this.hass.states[popEntity] && popData !== undefined ? Math.round(Number(popData)) : "---"}</div><div class="unit">%</div></span></li>` : html``;
@@ -886,7 +885,7 @@ export class PlatinumWeatherCard extends LitElement {
         var posData: string | undefined;
         if (this.forecast1 !== undefined ) {
           posData = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'precipitation');
-          console.info(`getForecast-H precipipation: ${posData}`);
+        //console.info(`getForecast-H precipipation: ${posData}`);
         }
       //const posData = this._getForecastPropFromWeather(this.hass.states[posEntity].attributes.forecast, forecastDate, 'precipitation');
         pos = posEntity ? html`<li class="f-slot-horiz-text"><span><div class="pos">${this.hass.states[posEntity] && posData !== undefined ? posData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
@@ -902,7 +901,7 @@ export class PlatinumWeatherCard extends LitElement {
         var tooltipData: string | undefined;
         if (this.forecast1 !== undefined ) {
           tooltipData = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'detailed_description') ?? this._getForecastPropFromWeather(this.forecast1, forecastDate, 'condition');
-          console.info(`getForecast-H tooltipData: ${tooltipData}`);
+        //console.info(`getForecast-H tooltipData: ${tooltipData}`);
         }
       //const tooltipData = this._getForecastPropFromWeather(this.hass.states[tooltipEntity].attributes.forecast, forecastDate, 'detailed_description') ?? this._getForecastPropFromWeather(this.hass.states[tooltipEntity].attributes.forecast, forecastDate, 'condition');
         tooltip = html`<div class="fcasttooltipblock" id="fcast-summary-${i}" style="width:${days * 100}%;left:-${i * 100}%;"><div class="fcasttooltiptext">${this.hass.states[tooltipEntity] && tooltipData !== undefined ? stringComputeStateDisplay(this.hass.localize, tooltipData) : "---"}</div>
@@ -951,7 +950,7 @@ export class PlatinumWeatherCard extends LitElement {
       var fireDanger: TemplateResult;
       var condition: string | undefined; //tjl moved to here; changed to var
 
-      console.info(`Forecast-V Date ${forecastDate}`); //tjl
+    //console.info(`Forecast-V Date ${forecastDate}`); //tjl
 
       if (this._config.entity_forecast_icon_1?.match('^weather.')) {
         // using a weather domain entity
@@ -960,7 +959,7 @@ export class PlatinumWeatherCard extends LitElement {
         //tjl using new forecast subscribe method
         if (this.forecast1 !== undefined ) {
           condition = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'condition');
-          console.info(`getForecast-V condition: ${condition}`);
+        //console.info(`getForecast-V condition: ${condition}`);
         }
       //const condition = this._getForecastPropFromWeather(this.hass.states[iconEntity].attributes.forecast, forecastDate, 'condition');
         if (condition === undefined) {
@@ -1005,7 +1004,7 @@ export class PlatinumWeatherCard extends LitElement {
         //tjl using new forecast subscribe method
         if (this.forecast1 !== undefined ) {
           maxTemp = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'temperature');
-          console.info(`getForecast-V temperature: ${maxTemp}`);
+        //console.info(`getForecast-V temperature: ${maxTemp}`);
         }
       //maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_1].attributes.forecast, forecastDate, 'temperature');
 
@@ -1018,7 +1017,7 @@ export class PlatinumWeatherCard extends LitElement {
        //tjl using new forecast subscribe method
         if (this.forecast1 !== undefined ) {
           minTemp = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'templow');
-          console.info(`getForecast-V templow: ${minTemp}`);
+        //console.info(`getForecast-V templow: ${minTemp}`);
         }
       //minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_1].attributes.forecast, forecastDate, 'templow');
       } else {
@@ -1043,7 +1042,7 @@ export class PlatinumWeatherCard extends LitElement {
         var popData: string | undefined;
         if (this.forecast1 !== undefined ) {
           popData = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'precipitation_probability');
-          console.info(`getForecast-V precip_prob: ${popData}`);
+        //console.info(`getForecast-V precip_prob: ${popData}`);
         }
       //const popData = this._getForecastPropFromWeather(this.hass.states[popEntity].attributes.forecast, forecastDate, 'precipitation_probability');
         pop = popEntity ? html`<div class="f-slot-vert"><div class="f-label">Chance of rain </div>
@@ -1062,7 +1061,7 @@ export class PlatinumWeatherCard extends LitElement {
         var posData: string | undefined;
         if (this.forecast1 !== undefined ) {
           posData = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'precipitation');
-          console.info(`getForecast-V precipipation: ${posData}`);
+        //console.info(`getForecast-V precipipation: ${posData}`);
         }
       //const posData = this._getForecastPropFromWeather(this.hass.states[posEntity].attributes.forecast, forecastDate, 'precipitation');
         pos = posEntity ? html`<div class="f-slot-vert"><div class="f-label">Possible rain </div>
@@ -1087,7 +1086,7 @@ export class PlatinumWeatherCard extends LitElement {
           if (this._config.daily_extended_use_attr === true) {
             if (this._config.daily_extended_name_attr !== undefined) {
               attrib = this._getForecastPropFromWeather(this.forecast1, forecastDate, this._config.daily_extended_name_attr);
-              console.info(`Forecast Daily Extended Attrib: ${attrib}`);
+            //console.info(`Forecast Daily Extended Attrib: ${attrib}`);
             }
           }  else {
             attrib = "daily_extended_use_attr: - must be set to true when entity_extended_1 is set to a weather entity";
@@ -1226,7 +1225,6 @@ export class PlatinumWeatherCard extends LitElement {
 
     //tjl added. Extend Hass to include "formatEntityState"
     this.hassExtended = this.hass as HassFormatEntityState;
-  //console.info(`formatEntityState:${this.hassExtended.formatEntityState(this.hass.states['weather.my_abc_weather'])}`);
 
     //tjl added/modified
     //  from: https://github.com/home-assistant/frontend/blob/dev/src/panels/lovelace/cards/hui-weather-forecast-card.ts
@@ -1430,7 +1428,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotPopForecast(): TemplateResult {
     //tjl use new forecast subscribe method below
     const forecast_pop = this.forecast1 !== undefined ? this.forecast1[0].precipitation_probability : undefined;
-    console.info(`Pop Forecast: ${forecast_pop}`);
+  //console.info(`Pop Forecast: ${forecast_pop}`);
 
     const pop = this._config.entity_pop && this.hass.states[this._config.entity_pop] !== undefined
       ? this._config.entity_pop.match('^weather.') === null
@@ -1444,7 +1442,7 @@ export class PlatinumWeatherCard extends LitElement {
     const pop_units = pop !== "---" ? html`<div class="slot-text unit">%</div>` : html``;
 
     const forecast_pos = this.forecast1 !== undefined ? this.forecast1[0].precipitation : undefined;
-    console.info(`Pos Forecast: ${forecast_pos}`);
+  //console.info(`Pos Forecast: ${forecast_pos}`);
 
     const pos = this._config.entity_pos && this.hass.states[this._config.entity_pos] !== undefined
       ? this._config.entity_pos.match('^weather.') === null
@@ -1472,7 +1470,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotPop(): TemplateResult {
     //tjl using new forecast subscribe method.
     const forecast_pop = this.forecast1 !== undefined ? this.forecast1[0].precipitation_probability : undefined;
-    console.info(`Forecast Pop: ${forecast_pop}`);
+  //console.info(`Forecast Pop: ${forecast_pop}`);
 
     const pop = this._config.entity_pop && this.hass.states[this._config.entity_pop] !== undefined
       ? this._config.entity_pop.match('^weather.') === null
@@ -1499,7 +1497,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotPos(): TemplateResult {
     //tjl use new forecast subscribe method below
     const forecast_pos = this.forecast1 !== undefined ? this.forecast1[0].precipitation : undefined;
-    console.info(`Pos: ${forecast_pos}`);
+  //console.info(`Pos: ${forecast_pos}`);
 
     const pos = this._config.entity_pos && this.hass.states[this._config.entity_pos] !== undefined
       ? this._config.entity_pos.match('^weather.') === null
@@ -1525,7 +1523,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotPossibleTomorrow(): TemplateResult {
     //tjl use new forecast subscribe method below
     const forecast_pos = this.forecast1 !== undefined ? this.forecast1[1].precipitation : undefined;
-    console.info(`Pos Tommorrow: ${forecast_pos}`);
+  //console.info(`Pos Tommorrow: ${forecast_pos}`);
 
     const pos = this._config.entity_possible_tomorrow && this.hass.states[this._config.entity_possible_tomorrow] !== undefined
       ? this._config.entity_possible_tomorrow.match('^weather.') === null
@@ -1629,7 +1627,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotForecastMax(): TemplateResult {
     //tjl using new forecast subscribe method.
     const temp_max = this.forecast1 !== undefined ? this.forecast1[0].temperature : undefined;
-    console.info(`Forecast Tempmax: ${temp_max}`);
+  //console.info(`Forecast Tempmax: ${temp_max}`);
 
     const digits = this._config.option_today_temperature_decimals === true ? 1 : 0;
     
@@ -1642,7 +1640,6 @@ export class PlatinumWeatherCard extends LitElement {
         //? (Number(this.hass.states[this._config.entity_forecast_max].attributes.forecast[0].temperature)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits })
           : '---'
       : "---";
-  //console.info(`temp: ${temp}`);
 
     const units = temp !== "---" ? html`<div class="unit-temp-small">${this.getUOM('temperature')}</div>` : html``;
     return html`
@@ -1661,7 +1658,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotForecastMin(): TemplateResult {
     //tjl using new forecast subscribe method.
     const temp_low = this.forecast1 !== undefined ? this.forecast1[0].templow : undefined;
-    console.info(`Forecast Templow: ${temp_low}`);
+  //console.info(`Forecast Templow: ${temp_low}`);
 
     const digits = this._config.option_today_temperature_decimals === true ? 1 : 0;
     const temp = this._config.entity_forecast_min && this.hass.states[this._config.entity_forecast_min] !== undefined

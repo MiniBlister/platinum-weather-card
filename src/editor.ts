@@ -1247,7 +1247,7 @@ get _forecast_type(): string {
 
     return html`
       <ha-entity-picker .hass=${this.hass} .configValue=${'weather_entity'} .value=${this._weather_entity} .includeDomains=${['weather']}
-        name="weather_entity" label="Main Weather Entity with Forecasts" allow-custom-entity
+        name="weather_entity" label="Weather Entity with Forecasts" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-select label="Forecast Type" .configValue=${'forecast_type'}
