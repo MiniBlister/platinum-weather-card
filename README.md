@@ -23,12 +23,15 @@ The design goals for the card are:
 
 # Installation
 
-Different from the original Platinum Weather Card (which is included by default within the HACS store), this plugin can still use HACS, but one needs to configure HACS for this particular repository. To install card from HACS (note that it requires HACS 1.26.0 or greater), configure. After installing the card you can add as many instances of the card on the dashboard as you desire. Due to the complexities of the card (icons/split code for performance) it is not recommended you do a manual install (also you don't get automatic updates offered, please use HACS!).
-- Go to the HACS Settings, and under ADD CUSTOM RESPOSITORY, paste ```https://github.com/tommyjlong/platinum-weather-card ```, and chose ```Plugin``` for the Category.  Hit save, and a new entry titled **[plugin]
-tommyjlong/platinum-weather-card** should be created under CUSTOM REPOSITORY.  
-- Click on the new entry and a page should appear which will allow you to install this card.  
-- Make a note of the instructions at the very bottom of the HACS installation page for adding the url and type to the lovelace configuration.
+The original Platinum Weather Card supports installation using HACS. It actually discourages manual installation "Due to the complexities of the card (icons/split code for performance)". The original card also exists within the HACS Store making its installation even more convenient.  </br>
 
+This "forked version" can also use HACS, but one needs to configure HACS for this particular forked repository. 
+- Go to the HACS "Front End" page and click on the upper-right 3-dots, and then click on "Custom Repositories". For "Repository", paste ```https://github.com/tommyjlong/platinum-weather-card ```, and choose `Lovelace` for the Category.  Hit ADD.
+- Back in the HACS "Front End" page, click on "+ EXPLORE AND DOWNLOAD REPOSITORIES".  Then do a search for "Platinum Weather Card".  
+- :warning: THERE WILL BE TWO IDENTICAL Platinum Weather Card ENTRIES showing up.  The top one is the original version that comes in the HACS store, the one below it is this "forked version". Click on the below entry.
+- A page should appear showing the README and the author showing up in the upper left hand corner (make sure it shows `tommyjlong` otherwise this is the incorrect repository).  On this page it should allow you to DOWNLOAD this card.  
+
+After installing the card you can add as many instances of the card on the dashboard as you desire. 
 # Getting Started
 
 You MUST have already configured a weather integration to provide data for the card to use. As with all cards they only visualise data from backend entities. There are numerous weather integrations available in both the core and HACS. You will need to find one that is best suited to your location (some countries have multiple options with varying degrees of accuracy). In this "forked version", for forecasts data, the card currently only supports the configuration of one weather integration. It is possible to use additional weather integrations for forecasts but to do so will require the use of template sensors to extract what you need.  
@@ -116,7 +119,7 @@ The following fields are available.
 | ------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
 | Entity Extended Forecast              | Entity  | The name of the entity that contains the detailed forecast                                                           |
 | &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast.  In this "forked version", if a weather entity is used for the Entity Extended Forecast, then this must be set to ON/true and the Attribute must also be configured. |
-| &nbsp;&nbsp;&nbsp;&nbsp;Attribute     | String  | The attribute that contains the detailed forecast                                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;Attribute     | String  | The attribute that contains the detailed forecast. In this "forked version" if the Entity Extended Forecast is a weather entity, there is a bug in that the choices listed are not forecast attributes, however you can still configure the attribute directly (ex. `detailed_description`). |
 | Entity Today's UV Forecast            | String  | If defined the text from this entity will be appended to the detailed forecast                                       |
 | Entity Today's Fire Danger            | String  | If defined the text from this entity will be appended to the detailed forecast                                       |
 
@@ -163,7 +166,7 @@ The following table describes what each slot value is intended to show. Note tha
 
 A section to show the daily forecast for a specified number of days in either a horizontal or vertical layout.
 
-![Platinum Weather card](./images/daily-forecast-section-highlighted.png)
+![Platinum Weather card](./images/daily-forecast-section-highlighted-updated.png)
 
 There are two posible layouts.  These are configured in the Card Editor for the Daily Section "Options".
 
@@ -187,17 +190,17 @@ The following fields are available.
 
 | Option name                               | Type    | Description                                                                                                          |
 | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| Main Weather Entity with Forecasts        | String  | In this "forked version", if a weather entity is used to provide forecast data, a single weather entity must be configured here. Any other configuration(s) below using a weather entity must set the configured weather entity to be the same as this one.    |
-| Forecast Type                             | String  | In this "forked version", if a weather entity is used to provide forecast data, the forecast type must be configured and set to "daily".  _In the future, options for "Hourly" and "Twice Daily" may be supported._   |
+| Weather Entity with Forecasts             | String  | In this "forked version", if a weather entity is configured anywhere to provide forecast data for this card, only a single weather entity is supported and it must be configured here. Any other configuration(s) below using a weather entity must set the configured weather entity to be the same as this one.    |
+| Forecast Type                             | String  | In this "forked version", if a weather entity is used to provide forecast data, the forecast type must be configured and set to "daily".  _Options for "Hourly" and "Twice Daily" are listed but are NOT._   |
 | Entity Forecast Icon 1                    | String  | The sensor entity whose state, or the weather entity whose forecast attribute `condition` contains the forecasted condition. It is used to derive the name of the icon to display.        |
 | Entity Forecast Summary 1                 | String  | The sensor entity whose state provides the short summary text (ex. "Showers increasing."). In this "forked version", a weather entity can be also be used and its forecast attribute `condition` will be used for the summary text and it is converted to a prettier state name. (Ex. partlycloudy to Partly cloudy).                                                                      |
 | Entity Forecast Min 1                     | String  | The entity that provides the forecast minimum temperature                                                            |
 | Entity Forecast Max 1                     | String  | The entity that provides the forecast maximum temperature                                                            |
 | Entity Forecast Chance of Rain 1          | String  | The entity that provides the percentage chance of rain                                                               |
 | Entity Forecast Possible Rain 1           | String  | The entity that provides the estimated amount of rain                                                                |
-| Entity Extended Forecast 1                | String  | The name of the entity that contains the detailed forecast text.  In this "forked version" if a weather entity is used it has to be specified directly.                                                      |
+| Entity Extended Forecast 1                | String  | The name of the entity that contains the detailed forecast text.  In this "forked version" if a weather entity is used, an attribute has to be specified.    |
 | &nbsp;&nbsp;&nbsp;&nbsp;Use Attribute     | Boolean | If this is enabled you will then be able to choose an attribute of the above entity to use for the detailed forecast.  In this "forked version", if a weather entity is used for the Entity Extended Forecast 1, then this must be set to ON/true and the Attribute must also be configured. |
-| &nbsp;&nbsp;&nbsp;&nbsp;Attribute         | String  | The attribute that contains the detailed forecast text.  In this "forked version" for a weather entity, if its name is not listed, you can specify it directly |
+| &nbsp;&nbsp;&nbsp;&nbsp;Attribute         | String  | The attribute that contains the detailed forecast text.  In this "forked version" for a weather entity, there is a bug in that the choices listed are not forecast attributes, however you can still configure the attribute directly (ex. `detailed_description`). |
 | Entity Fire Danger 1                      | String  | The entity that provides the fire danger forecast                                                                    |
 
 For these entities you can either specify a weather entity, in which case this card will use the data from the forecast's attributes (note that "detailed forecast text" and "fire danger" may not be included in your weather integration's forecast), or you can use individual template sensors and when you provide the name of the sensor for tomorrow's forecast item use a number in the name and then repeat this for the subsequent days' sensors and make sure these corresponding subsequent days' sensors have an incrementing number in their name.
