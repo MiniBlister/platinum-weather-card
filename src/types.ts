@@ -30,6 +30,47 @@ export type extendedDays = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type pressureDecimals = 0 | 1 | 2 | 3;
 export type timeFormat = 'system' | '12hour' | '24hour';
 
+export const conditionDefaults = [
+  'sunny',          
+  'mostly sunny',
+  'partly sunny',
+  'intermittent clouds',
+  'hazy sunshine',
+  'mostly cloudy',
+  'cloudy',
+  'dreary (overcast)',
+  'fog',
+  'showers',
+  'mostly cloudy w/ showers',
+  'partly sunny w/ showers',
+  'mostly cloudy w/ t-storms',
+  'partly sunny w/ t-storms',
+  'rain',
+  'flurries',
+  'mostly cloudy w/ flurries',
+  'partly sunny w/ flurries',
+  'snow',
+  'mostly cloudy w/ snow',
+  'ice',
+  'sleet',
+  'freezing rain',
+  'rain and snow',
+  'hot',
+  'cold',
+  'windy',
+  'clear',
+  'mostly clear',
+  'partly cloudy',
+  'intermittent clouds',
+  'hazy moonlight',
+  'mostly cloudy',
+  'partly cloudy w/ showers',
+  'mostly cloudy w/ showers',
+  'partly cloudy w/ t-storms',
+  'mostly cloudy w/ flurries',
+  'mostly cloudy w/ snow'
+];
+
 // TODO Add your configuration elements here for type-checking
 export interface WeatherCardConfig extends LovelaceCardConfig {
   type: string;
@@ -146,5 +187,94 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   style?: string;
+
+  // Conditions and Icons
+  // Conditions and Icons
+  option_condition_1?: string;
+  option_condition_2?: string;
+  option_condition_3?: string;
+  option_condition_4?: string;
+  option_condition_5?: string;
+  option_condition_6?: string;
+  option_condition_7?: string;
+  option_condition_8?: string;
+  option_condition_9?: string;
+  option_condition_10?: string;
+  option_condition_11?: string;
+  option_condition_12?: string;
+  option_condition_13?: string;
+  option_condition_14?: string;
+  option_condition_15?: string;
+  option_condition_16?: string;
+  option_condition_17?: string;
+  option_condition_18?: string;
+  option_condition_19?: string;
+  option_condition_20?: string;
+  option_condition_21?: string;
+  option_condition_22?: string;
+  option_condition_23?: string;
+  option_condition_24?: string;
+  option_condition_25?: string;
+  option_condition_26?: string;
+  option_condition_27?: string;
+  option_condition_28?: string;
+  option_condition_29?: string;
+  option_condition_30?: string;
+  option_condition_31?: string;
+  option_condition_32?: string;
+  option_condition_33?: string;
+  option_condition_34?: string;
+  option_condition_35?: string;
+  option_condition_36?: string;
+  option_condition_37?: string;
+  option_condition_38?: string;
+  option_condition_39?: string;
+  option_condition_40?: string;
+  
+
+  option_icon_1?: string;
+  option_icon_2?: string;
+  option_icon_3?: string;
+  option_icon_4?: string;
+  option_icon_5?: string;
+  option_icon_6?: string;
+  option_icon_7?: string;
+  option_icon_8?: string;
+  option_icon_9?: string;
+  option_icon_10?: string;
+  option_icon_11?: string;
+  option_icon_12?: string;
+  option_icon_13?: string;
+  option_icon_14?: string;
+  option_icon_15?: string;
+  option_icon_16?: string;
+  option_icon_17?: string;
+  option_icon_18?: string;
+  option_icon_19?: string;
+  option_icon_20?: string;
+  option_icon_21?: string;
+  option_icon_22?: string;
+  option_icon_23?: string;
+  option_icon_24?: string;
+  option_icon_25?: string;
+  option_icon_26?: string;
+  option_icon_27?: string;
+  option_icon_28?: string;
+  option_icon_29?: string;
+  option_icon_30?: string;
+  option_icon_31?: string;
+  option_icon_32?: string;
+  option_icon_33?: string;
+  option_icon_34?: string;
+  option_icon_35?: string;
+  option_icon_36?: string;
+  option_icon_37?: string;
+  option_icon_38?: string;
+  option_icon_39?: string;
+  option_icon_40?: string;  
+
+
 }
+
+
 

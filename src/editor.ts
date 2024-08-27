@@ -7,7 +7,7 @@ import { keys } from 'ts-transformer-keys';
 import { mdiPencil, mdiArrowDown, mdiArrowUp, mdiApplicationEditOutline } from '@mdi/js';
 
 //import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
-import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, pressureDecimals, HassCustomElement } from './types';
+import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, pressureDecimals, HassCustomElement, conditionDefaults } from './types';
 import { customElement, property, state } from 'lit/decorators';
 import { formfieldDefinition } from '../elements/formfield';
 import { selectDefinition } from '../elements/select';
@@ -26,6 +26,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   private _initialized = false;
   private _config_version = 8;
+
+  private _conditions: string[] = [];
+  private _icons: string[] = [];
+
 
   static elementDefinitions = {
     "ha-card": customElements.get("ha-card"),  // This works because ha-card is ALWAYS loaded before custom cards (for now)
@@ -63,6 +67,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         }
       });
     }
+
+    // Load default values for conditions and icons using methods
+    this._conditions = Array.from({ length: 40 }, (_, i) => this._getOptionCondition(i + 1));
+    this._icons = Array.from({ length: 40 }, (_, i) => this._getOptionIcon(i + 1));
 
     if (changed) {
       fireEvent(this, 'config-changed', { config: this.sortObjectByKeys(this._config) });
@@ -501,11 +509,11 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_forecast_icon_1 || '';
   }
   
-get _weather_entity(): string {
+  get _weather_entity(): string {
     return this._config?.weather_entity || '';
   }
 
-get _forecast_type(): string {
+  get _forecast_type(): string {
     return this._config?.forecast_type || '';
   }
 
@@ -581,6 +589,17 @@ get _forecast_type(): string {
   get _option_locale(): string {
     return this._config?.option_locale || '';
   }
+
+  // Method for retrieving option_condition_X
+  private _getOptionCondition(index: number): string {
+    return this._config?.[`option_condition_${index}`] || `Condition ${index}`;
+  }
+
+  // Method for retrieving option_icon_X
+  private _getOptionIcon(index: number): string {
+    return this._config?.[`option_icon_${index}`] || `Icon ${index}`;
+  }
+
 
   get _optional_entities(): TemplateResult {
     const entities = new Set();
@@ -1390,6 +1409,27 @@ get _forecast_type(): string {
     `;
   }
 
+  private _optionIconOptionsEditor(): TemplateResult {
+    return html`
+          ${Array.from({ length: 40 }, (_, i) => html`
+          <div class="side-by-side">
+              <ha-textfield
+                  label="Condition ${i + 1} (e.g. ${conditionDefaults[i] ? conditionDefaults[i] : 'default' })"
+                  .value=${this._conditions[i]}
+                  .configValue=${`option_condition_${i + 1}`}
+                  @input=${this._valueChanged}
+              ></ha-textfield>
+              <ha-textfield
+                  label="Icon ${i + 1}"
+                  .value=${this._icons[i]}
+                  .configValue=${`option_icon_${i + 1}`}
+                  @input=${this._valueChanged}
+              ></ha-textfield>
+          </div>
+      `)}
+    `;    
+  }
+
   private _renderSubElementEditor(): TemplateResult {
     const subel: TemplateResult[] = [
       html`
@@ -1426,6 +1466,9 @@ get _forecast_type(): string {
         break;
       case 'option_global_options':
         subel.push(this._optionGlobalOptionsEditor());
+        break;
+      case 'option_icon_options':
+        subel.push(this._optionIconOptionsEditor());
         break;
     }
     return html`${subel}`;
@@ -1540,6 +1583,18 @@ get _forecast_type(): string {
             </div>
           </div>
         `;
+      case 'icon_options':
+        return html`
+          <div class="section-flex">
+            <ha-formfield class="no-switch" .label=${`Icon Options`}>
+            </ha-formfield>
+            <div>
+              <div class="no-icon"></div>
+              <ha-icon-button class="edit-icon" .value=${'option_icon_options'} .path=${mdiApplicationEditOutline} @click="${this._editSubmenu}">
+              </ha-icon-button>
+            </div>
+          </div>
+        `;        
     }
     return html``;
   }
@@ -1558,6 +1613,7 @@ get _forecast_type(): string {
       htmlConfig.push(this.getConfigBlock(slot, index === 0, index + 1 === slots.length));
     });
     htmlConfig.push(this.getConfigBlock('global_options', false, false));
+    htmlConfig.push(this.getConfigBlock('icon_options', false, false));
 
     return html`${htmlConfig}`;
   }
@@ -1643,25 +1699,65 @@ get _forecast_type(): string {
     fireEvent(this, 'config-changed', { config: this.sortObjectByKeys(this._config) });
   }
 
+
   private _valueChanged(ev): void {
     if (!this._config || !this.hass) {
       return;
     }
     const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
-      return;
-    }
-    if (target.configValue) {
-      if (target.value === '') {
-        const tmpConfig = { ...this._config };
-        delete tmpConfig[target.configValue];
-        this._config = tmpConfig;
+    const configValue = target.configValue;
+
+    // Determine if the configValue corresponds to a condition or icon
+    const conditionMatch = configValue.match(/^option_condition_(\d+)$/);
+    const iconMatch = configValue.match(/^option_icon_(\d+)$/);
+
+
+    if (conditionMatch) {
+      const index = parseInt(conditionMatch[1], 10) - 1; // Convert to zero-based index
+      const value = target.value;
+
+      if (value === '') {
+          this._conditions[index] = `Default Condition ${index + 1}`;
+          delete this._config[configValue];
       } else {
-        this._config = {
-          ...this._config,
-          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
-        };
+          this._conditions[index] = value;
+          this._config = {
+              ...this._config,
+              [configValue]: value,
+          };
       }
+    } else if (iconMatch) {
+        const index = parseInt(iconMatch[1], 10) - 1; // Convert to zero-based index
+        const value = target.value;
+
+        if (value === '') {
+            this._icons[index] = `Default Icon ${index + 1}`;
+            delete this._config[configValue];
+        } else {
+            this._icons[index] = value;
+            this._config = {
+                ...this._config,
+                [configValue]: value,
+            };
+        }
+    } else {
+        // Handle any other config values
+        if (this[`_${configValue}`] === target.value) {
+            return;
+        }
+
+        if (configValue) {
+            if (target.value === '') {
+                const tmpConfig = { ...this._config };
+                delete tmpConfig[configValue];
+                this._config = tmpConfig;
+            } else {
+                this._config = {
+                    ...this._config,
+                    [configValue]: target.checked !== undefined ? target.checked : target.value,
+                };
+            }
+        }
     }
     fireEvent(this, 'config-changed', { config: this.sortObjectByKeys(this._config) });
   }

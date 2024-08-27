@@ -465,10 +465,10 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderCompleteOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
-    const weatherIcon = this._weatherIcon(this.forecastIcon);
-    const url = new URL((this._config.option_static_icons ? 's-' : 'a-') + weatherIcon + '.svg', import.meta.url);
-    const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.forecastIcon}`;
-    const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.forecastIcon}</div>`;
+    const weatherIcon = this._getIconForCondition(this.forecastIcon);
+    const url = new URL(weatherIcon + '.svg', import.meta.url);
+    const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.forecastIcon}`; // to check
+    const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.forecastIcon}</div>`; // to check
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
 
     const currentTemp = html`
@@ -563,8 +563,8 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderForecastOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
-    const weatherIcon = this._weatherIcon(this.forecastIcon);
-    const url = new URL((this._config.option_static_icons ? 's-' : 'a-') + weatherIcon + '.svg', import.meta.url);
+    const weatherIcon = this._getIconForCondition(this.forecastIcon);
+    const url = new URL(weatherIcon + '.svg', import.meta.url);
     const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.forecastIcon}`;
     const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.forecastIcon}</div>`;
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
@@ -776,23 +776,28 @@ export class PlatinumWeatherCard extends LitElement {
         var condition: string | undefined;
         if (this.forecast1 !== undefined ) {
           condition = this._getForecastPropFromWeather(this.forecast1, forecastDate, 'condition');
-        //console.info(`getForecast-H condition: ${condition}`);
+          //console.info(`WeatherEntity Condition: ${condition}`);
         }
-      //const condition = this._getForecastPropFromWeather(this.hass.states[iconEntity].attributes.forecast, forecastDate, 'condition');
+        //const condition = this._getForecastPropFromWeather(this.hass.states[iconEntity].attributes.forecast, forecastDate, 'condition');
         if (condition === undefined) {
           break;
         }
-
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace("-night", "-day"), import.meta.url);
+        const weatherIcon = this._getIconForCondition(condition.toLowerCase());
+        //console.info(`WeatherEntity WeatherIcon: ${weatherIcon}.svg`);
+        const url = new URL(weatherIcon + '.svg', import.meta.url);
         htmlIcon = html`<li class="f-slot-horiz-icon"><i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i></li>`;
       } else {
         // using sensor domain entities
         var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        //console.info(`SensorEntity start: ${start}`);
         const iconEntity = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
+        //console.info(`SensorEntity iconEntity: ${iconEntity}`);
         if ((iconEntity === undefined) || (this.hass.states[iconEntity] === undefined)) { // if there is no data then cut the forecast short
           break;
         }
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && this.hass.states[iconEntity] ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace("-night", "-day"), import.meta.url);
+        const weatherIcon = iconEntity && this.hass.states[iconEntity] ? this._getIconForCondition(this.hass.states[iconEntity].state) : 'unknown';
+        //console.info(`SensorEntity weatherIcon: ${weatherIcon}`);
+        const url = new URL(weatherIcon + '.svg', import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
       if (this._config.entity_forecast_max_1?.match('^weather.')) {
@@ -966,7 +971,8 @@ export class PlatinumWeatherCard extends LitElement {
           break;
         }
 
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace("-night", "-day"), import.meta.url);
+        const weatherIcon = this._getIconForCondition(this.forecastIcon);
+        const url = new URL(weatherIcon + '.svg', import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
       } else {
         // using sensor domain entities
@@ -975,7 +981,8 @@ export class PlatinumWeatherCard extends LitElement {
         if (!iconEntity || this.hass.states[iconEntity] === undefined || this.hass.states[iconEntity].state === 'unknown') { // Stop adding forecast days as soon as an undefined entity is encountered
           break;
         }
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (this.hass.states[iconEntity] !== undefined ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace("-night", "-day"), import.meta.url);
+        const weatherIcon = this._getIconForCondition(this.forecastIcon);
+        const url = new URL(weatherIcon + '.svg', import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
       }
 
@@ -1170,6 +1177,18 @@ export class PlatinumWeatherCard extends LitElement {
       </div>
     `;
   }
+
+  private _getIconForCondition(conditionToMatch: string): string | null {
+    for (let i = 1; i <= 30; i++) {
+        const condition = this._config?.[`option_condition_${i}`];
+        
+        if (condition && condition.toLowerCase() === conditionToMatch.toLowerCase()) {
+            const icon = this._config?.[`option_icon_${i}`];
+            return icon ? this._config?.[`option_icon_${i}`] : "unknown"; 
+        }
+    }
+    return null; // Return null if no match is found
+}
 
   private _getForecastPropFromWeather(forecast: Array<any>, date: Date, propKey: string): string | undefined {
     const day = date.toDateString();
@@ -2260,180 +2279,7 @@ export class PlatinumWeatherCard extends LitElement {
     return this._config.option_time_format ? this._config.option_time_format : 'system';
   }
 
-  // get the icon that matches the current conditions
-  private _weatherIcon(conditions: string): string {
-    switch (conditions) {
-      case 'sunny':
-      case 'clear': return this.iconClear;
-      case 'mostly-sunny':
-      case 'mostly_sunny': return this.iconMostlySunny;
-      case 'partly-cloudy':
-      case 'partly_cloudy':
-      case 'partlycloudy': return this.iconPartlyCloudy;
-      case 'cloudy': return this.iconCloudy;
-      case 'hazy':
-      case 'hazey':
-      case 'haze': return this.iconHazy;
-      case 'frost': return this.iconFrost;
-      case 'light-rain':
-      case 'light_rain': return this.iconLightRain;
-      case 'wind':
-      case 'windy': return this.iconWindy;
-      case 'fog':
-      case 'foggy': return this.iconFog;
-      case 'showers':
-      case 'shower': return this.iconShowers;
-      case 'rain':
-      case 'rainy': return this.iconRain;
-      case 'dust':
-      case 'dusty': return this.iconDust;
-      case 'snow':
-      case 'snowy': return this.iconSnow;
-      case 'snowy-rainy':
-      case 'snowy_rainy':
-      case 'snowyrainy': return this.iconSnowRain;
-      case 'storm':
-      case 'stormy': return this.iconStorm;
-      case 'light-showers':
-      case 'light-shower':
-      case 'light_showers':
-      case 'light_shower': return this.iconLightShowers;
-      case 'heavy-showers':
-      case 'heavy-shower':
-      case 'heavy_showers':
-      case 'heavy_shower':
-      case 'pouring': return this.iconHeavyShowers;
-      case 'tropical-cyclone':
-      case 'tropical_cyclone':
-      case 'tropicalcyclone': return this.iconCyclone;
-      case 'clear-day':
-      case 'clear_day': return this.iconClearDay;
-      case 'clear-night':
-      case 'clear_night': return this.iconClearNight;
-      case 'sleet': return this.iconSleet;
-      case 'partly-cloudy-day':
-      case 'partly_cloudy_day': return this.iconPartlyCloudyDay;
-      case 'partly-cloudy-night':
-      case 'partly_cloudy_night': return this.iconPartlyCloudyNight;
-      case 'hail': return this.iconHail;
-      case 'lightning':
-      case 'lightning-rainy':
-      case 'lightning_rainy':
-      case 'thunderstorm': return this.iconLightning;
-      case 'windy-variant':
-      case 'windy_variant': return this.iconWindyVariant;
-    }
-    return 'unknown';
-  }
 
-  get dayOrNight(): string {
-    const transformDayNight = { "below_horizon": "night", "above_horizon": "day", };
-    return this._config.entity_sun && this.hass.states[this._config.entity_sun] !== undefined ? transformDayNight[this.hass.states[this._config.entity_sun].state] : 'day';
-  }
-
-  get iconClear(): string {
-    return `clear-${this.dayOrNight}`;
-  }
-
-  get iconMostlySunny(): string {
-    return `cloudy-1-${this.dayOrNight}`;
-  }
-
-  get iconPartlyCloudy(): string {
-    return `cloudy-2-${this.dayOrNight}`;
-  }
-
-  get iconCloudy(): string {
-    return `cloudy`;
-  }
-
-  get iconHazy(): string {
-    return `haze-${this.dayOrNight}`;
-  }
-
-  get iconFrost(): string {
-    return `frost-${this.dayOrNight}`;
-  }
-
-  get iconLightRain(): string {
-    return `rainy-2`;
-  }
-
-  get iconWindy(): string {
-    return `wind`;
-  }
-
-  get iconFog(): string {
-    return `fog-${this.dayOrNight}`;
-  }
-
-  get iconShowers(): string {
-    return `rainy-1-${this.dayOrNight}`;
-  }
-
-  get iconRain(): string {
-    return `rainy-3`;
-  }
-
-  get iconDust(): string {
-    return `dust`;
-  }
-
-  get iconSnow(): string {
-    return `snowy-3`;
-  }
-
-  get iconSnowRain(): string {
-    return `snow-and-sleet-mix`;
-  }
-
-  get iconStorm(): string {
-    return `scattered-thunderstorms-${this.dayOrNight}`;
-  }
-
-  get iconLightShowers(): string {
-    return `rainy-1-${this.dayOrNight}`;
-  }
-
-  get iconHeavyShowers(): string {
-    return `rainy-2-${this.dayOrNight}`;
-  }
-
-  get iconCyclone(): string {
-    return `tropical-storm`;
-  }
-
-  get iconClearDay(): string {
-    return `clear-day`;
-  }
-
-  get iconClearNight(): string {
-    return `clear-night`;
-  }
-
-  get iconSleet(): string {
-    return `rain-and-sleet-mix`;
-  }
-
-  get iconPartlyCloudyDay(): string {
-    return `cloudy-1-day`;
-  }
-
-  get iconPartlyCloudyNight(): string {
-    return `cloudy-1-night`;
-  }
-
-  get iconHail(): string {
-    return `hail`;
-  }
-
-  get iconLightning(): string {
-    return `isolated-thunderstorms-${this.dayOrNight}`;
-  }
-
-  get iconWindyVariant(): string {
-    return `wind`;
-  }
 
   get locale(): string | undefined {
     try {
